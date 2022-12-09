@@ -7,28 +7,34 @@ public class Calc {
     private static int number1, number2;
     private static int result;
     private static boolean greekOrRoman;
-
+    private static Convert convert;
 
 
     public static void main(String[] args) throws Exception {
 
-        Convert convert = new Convert();
+        convert = new Convert();
         Scanner scanner = new Scanner(System.in);
         System.out.println("Введите выражение используя арабские или римские числа от 1 до 10");
         System.out.println("Вводить данные нужно через пробел.");
         System.out.println("Пример: 2 * 4 или II + IV");
-        String input = scanner.nextLine();
+        String userInput = scanner.nextLine();
+        System.out.println("Ответ: " + calc(userInput));
+    }
+
+
+
+    public static String calc (String input) throws Exception {
 
         chars = input.split(" ");
 
-        if (chars.length < 3) throw new Exception("Выражение введено некорректно.");
+        if (chars.length != 3) throw new Exception("Выражение введено некорректно.");
 
         if (convert.isRoman(chars[0]) && convert.isRoman(chars[2])) {
             greekOrRoman = true;
             number1 = convert.returnNumber(chars[0]);
             number2 = convert.returnNumber(chars[2]);
             examinationLessOrMoreTen();
-        } else if (!convert.isRoman(chars[0]) && !convert.isRoman(chars[2])){
+        } else if (!convert.isRoman(chars[0]) && !convert.isRoman(chars[2])) {
             greekOrRoman = false;
             number1 = convertStringToInteger(chars[0]);
             number2 = convertStringToInteger(chars[2]);
@@ -40,14 +46,11 @@ public class Calc {
         char x = chars[1].charAt(0);
         if (x == '+') {
             operation = '+';
-        }
-        else if (x == '-') {
+        } else if (x == '-') {
             operation = '-';
-        }
-        else if (x == '*') {
+        } else if (x == '*') {
             operation = '*';
-        }
-        else if (x == '/') {
+        } else if (x == '/') {
             operation = '/';
         } else {
             throw new Exception("Не верная арифмитическая операция");
@@ -72,25 +75,25 @@ public class Calc {
         }
 
         if (!greekOrRoman) {
-            System.out.println("Ответ: " + result);
-        }else if (result == 10 ||
-        result == 20 ||
-        result == 30 ||
-        result == 40 ||
-        result == 50 ||
-        result == 60 ||
-        result == 70 ||
-        result == 80 ||
-        result == 90 ||
-        result == 100) {
-            System.out.println("Ответ: " + convert.getKeysByValue(result));
+            return String.valueOf(result);
+        } else if (result == 10 ||
+                result == 20 ||
+                result == 30 ||
+                result == 40 ||
+                result == 50 ||
+                result == 60 ||
+                result == 70 ||
+                result == 80 ||
+                result == 90 ||
+                result == 100) {
+            return convert.getKeysByValue(result);
         } else if (result > 10) {
             int num = result;
-            int[] digits = Integer.toString(num).chars().map(c -> c-'0').toArray();
+            int[] digits = Integer.toString(num).chars().map(c -> c - '0').toArray();
             int y = digits[0] * 10;
-            System.out.println(convert.getKeysByValue(y) + "" + convert.getKeysByValue(digits[1]));
-        } else if (result > 0){
-            System.out.println("Ответ: " + convert.getKeysByValue(result));
+            return (convert.getKeysByValue(y) + "" + convert.getKeysByValue(digits[1]));
+        } else if (result > 0) {
+            return convert.getKeysByValue(result);
         } else {
             throw new Exception("Результат вычисления римских чисел не может быть отрицательным или 0.");
         }
